@@ -1,0 +1,57 @@
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.my-list {
+  margin-top: 20px;
+}
+
+/*时间轴样式*/
+.schedule-list {
+  width: 360px;
+  padding-right: 16px;
+  padding-left: 4px;
+  line-height: 1;
+  margin-top: 20px;
+}
+
+.schedule-list li {
+  position: relative;
+  padding: 0 0 10px 20px;
+  border-left: 1px solid #e1e1e1;
+  list-style: none;
+}
+
+.schedule-list .tit {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #007aff;
+  font-size: 16px;
+}
+
+.schedule-list .tit-default {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.schedule-list li:before {
+  position: absolute;
+  left: -5.5px;
+  top: 0;
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 7px;
+  border: 2px solid #d00000;
+  background-color: #fff;
+}
+
+.schedule-list .done:before {
+  border-color: #999;
+}
