@@ -4,8 +4,6 @@ export default {
   namespace: 'findModel',
 
   state: {
-
-
     blockData: {
       rows: [],
       pageNumber: 1,
@@ -28,7 +26,6 @@ export default {
 
 
   reducers: {
-
     updateState(state, {res}) { //更新state
       return {
         ...state,
@@ -41,9 +38,16 @@ export default {
   effects: {
 
 
+    // 获取验证码
+    * getCode({payload, callback}, {call, put, select}) {
+      const data = yield call(services.getCode, payload);
+      if (callback) {
+        callback(data);
+      }
+    },
+
     // 登录
     * dologin({payload, callback}, {call, put, select}) {
-      debugger
       const data = yield call(services.dologin, payload);
       if (callback) {
         callback(data);
@@ -72,6 +76,7 @@ export default {
         callback(data);
       }
     },
+
 
 
   },

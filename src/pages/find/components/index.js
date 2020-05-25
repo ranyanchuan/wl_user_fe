@@ -1,11 +1,9 @@
 import React from 'react';
 import {connect} from 'dva';
-
-import {Button, List, InputItem, Carousel, Toast} from 'antd-mobile';
-import {checkError, checkEdit, getPageParam} from 'utils';
+import {Button, List, InputItem, Carousel, Toast, WingBlank} from 'antd-mobile';
 import {createForm} from 'rc-form';
+import {checkError} from 'utils';
 import FahuoList from "./FahuoList";
-
 import styles from './index.less';
 
 const Item = List.Item;
@@ -20,6 +18,7 @@ class ProductApp extends React.Component {
   state = {
     countdown: true,
     isCountdown: 0,
+    hasError: false,
   };
 
 
@@ -49,15 +48,16 @@ class ProductApp extends React.Component {
       if (!err) {
 
         let usercode = values.usercode.replace(/\s+/g, "");
+
         this.props.dispatch({
           type: 'findModel/dologin',
           payload: {...values, usercode},
           callback: (value) => {
-            const {data, code} = value;
-            if (checkError(value)) {
+            const {data} = value;
+            if (data && checkError(value)) {
+              this.getData();
               const {token} = data;
               localStorage.setItem("token", token);
-              this.getData();
             }
           },
         });
@@ -80,19 +80,17 @@ class ProductApp extends React.Component {
 
           this.countFun();
           this.props.dispatch({
-            type: 'commonModel/dologin',
+            type: 'findModel/getCode',
             payload: {usercode},
             callback: (data) => {
-              const temp = {spinning: false};
               if (checkError(data)) {
                 console.log('验证码发送成功');
               }
-              this.setState(temp);
             },
           });
 
         } else {
-          Toast.info('手机号码有误，请重填!', 1);
+          Toast.info('手机号码有误!', 1);
         }
       }
     })
@@ -101,12 +99,13 @@ class ProductApp extends React.Component {
 
 
   initMsm = () => {
+
     clearInterval(this.timer);
     this.setState({isCountdown: 0});
   };
 
+  // 倒计时开始
   countFun = () => {
-
     this.timer = setInterval(() => {
       const {isCountdown} = this.state;
       //防止倒计时出现负数
@@ -118,12 +117,27 @@ class ProductApp extends React.Component {
     }, 1000);
   };
 
+  // 动态校验手机
+  onChangeUser = (value) => {
+
+    let usercode = value.replace(/\s+/g, "");
+    let hasError = true;
+    if (usercode && (/^1[3456789]\d{9}$/.test(usercode))) {
+      hasError = false;
+    }
+    this.setState({hasError});
+  }
+
+
+  // 错误提示
+  onErrorClick = () => {
+    Toast.info('手机号码有误!', 1);
+  }
 
   render() {
 
     const {getFieldProps} = this.props.form;
-    const {isCountdown} = this.state;
-
+    const {isCountdown, hasError} = this.state;
     const token = localStorage.getItem('token');
 
     const codeInfo = isCountdown ? isCountdown + 's 后重新获取' :
@@ -131,7 +145,7 @@ class ProductApp extends React.Component {
 
 
     return (
-      <div>
+      <div style={{backgroundColor: "#f5f5f9"}}>
         <Carousel
           autoplay={false}
           infinite
@@ -143,7 +157,6 @@ class ProductApp extends React.Component {
             alt=""
             style={{width: '100%', verticalAlign: 'top'}}
             onLoad={() => {
-              // fire window resize event to change height
               window.dispatchEvent(new Event('resize'));
               this.setState({imgHeight: 'auto'});
             }}
@@ -151,32 +164,38 @@ class ProductApp extends React.Component {
         </Carousel>
 
         {/*获取手机号*/}
+        <WingBlank>
+          {token ?
+            <FahuoList/> :
+            <div style={{marginTop: 20}}>
+              <List>
+                <InputItem
+                  {...getFieldProps('usercode', {
 
-        {token ?
-          <FahuoList/> :
-          <div>
-            <List>
-              <InputItem
-                {...getFieldProps('usercode', {
-                  rules: [{required: true, message: "请输入手机号"}],
-                  initialValue: "",
-                })}
-                type="phone"
-                placeholder="186 1234 1234"
-              >手机号码</InputItem>
+                    rules: [{required: true, message: "请输入手机号"}],
+                    initialValue: "",
+                    onChange: this.onChangeUser,
 
-              <InputItem
-                {...getFieldProps('password', {
-                  rules: [{required: true, message: "请输入验证码"}],
-                  initialValue: "",
-                })}
-                extra={codeInfo}
-              >验证码</InputItem>
+                  })}
+                  type="phone"
+                  error={hasError}
+                  onErrorClick={this.onErrorClick}
+                  placeholder="186 1234 1234"
+                  extra={!hasError ? codeInfo : null}
+                >手机号码</InputItem>
 
-            </List>
-            <Button type="primary" onClick={this.onSubmit}>登录</Button>
-          </div>
-        }
+                <InputItem
+                  {...getFieldProps('password', {
+                    rules: [{required: true, message: "请输入验证码"}],
+                    initialValue: "",
+                  })}
+                >短信验证</InputItem>
+
+              </List>
+              <Button type="primary" style={{marginTop: 20}} onClick={this.onSubmit}>登录</Button>
+            </div>
+          }
+        </WingBlank>
 
 
       </div>

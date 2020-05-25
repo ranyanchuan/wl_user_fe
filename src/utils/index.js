@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Toast} from 'antd-mobile';
+import {Toast} from 'antd-mobile';
 
 /**
  /**
@@ -247,7 +247,12 @@ export function formatFormDateRange(formData, fieldArray, formatRule = 'YYYY-MM-
 
 // 请求放回错误处理
 export function checkError(value) {
+  
   const {code, info} = value;
+  if (value.err) {
+    Toast.fail(value);
+  }
+
   if (code == -1) { // 请求错误
     Toast.fail(info);
     return false;

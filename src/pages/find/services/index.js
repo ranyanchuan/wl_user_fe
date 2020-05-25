@@ -1,11 +1,19 @@
 import {requestJson} from 'utils/request';
 
 const api = {
+  getCode: '/h5/getCode', // 获取验证码
   dologin: '/h5/doh5login', // 登录
   getFahuo: '/h5/fahuo/page', // 发货
   getDesc: '/h5/wuliu/queryInfo', // 详情
 
 };
+
+export async function getCode(payload) {
+  return requestJson(api.getCode, {
+    method: 'POST',
+    payload
+  });
+}
 
 export async function dologin(payload) {
   return requestJson(api.dologin, {

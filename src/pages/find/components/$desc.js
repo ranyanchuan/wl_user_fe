@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Icon, List, NavBar, Toast} from 'antd-mobile';
+import {Icon, List, NavBar, Toast, WingBlank} from 'antd-mobile';
 import {checkError, checkEdit, getPageParam} from 'utils';
 import router from "umi/router";
 import styles from './index.less';
@@ -59,36 +59,40 @@ class ProductApp extends React.Component {
         >详情</NavBar>
 
 
-        <List className="my-list">
-          <Item
-            key={descData.id}
-            // arrow="horizontal"
-            thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-            multipleLine
-          >
-            <span className={styles.spanHref}>{descData.number}</span>
-            <Brief><a href="">{descData.com}</a></Brief>
-          </Item>
 
-        </List>
+        <WingBlank>
+
+          <List className="my-list">
+            <Item
+              key={descData.id}
+              // arrow="horizontal"
+              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+              multipleLine
+            >
+              <span className={styles.spanHref}>{descData.number}</span>
+              <Brief><a href="">{descData.com}</a></Brief>
+            </Item>
+
+          </List>
 
 
-        <div className="schedule-list">
-          <ul id="schedule-list">
+          <div className="schedule-list">
+            <ul id="schedule-list">
 
-            {traces && traces.map((item, index) => {
-              return (
-                <li className={index !== 0 ? "done" : ""} key={index.toString()}>
-                  <p>
-                    <span className="time">{item.time}</span>
-                    <i className="icon"></i>
-                  </p>
-                  <p className={index !== 0 ? "tit-default" : "tit"}>{item.detail}</p>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
+              {traces && traces.map((item, index) => {
+                return (
+                  <li className={index !== 0 ? "done" : ""} key={index.toString()}>
+                    <p>
+                      <span className="time">{item.time}</span>
+                      <i className="icon"></i>
+                    </p>
+                    <p className={index !== 0 ? "tit-default" : "tit"}>{item.detail}</p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </WingBlank>
 
 
       </div>
