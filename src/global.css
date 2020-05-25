@@ -13,11 +13,13 @@ body {
 
 /*时间轴样式*/
 .schedule-list {
-  width: 360px;
+  /*width: 100%;*/
   padding-right: 16px;
+  padding-top: 30px;
   padding-left: 4px;
   line-height: 1;
   margin-top: 20px;
+  background-color: #fff;
 }
 
 .schedule-list li {

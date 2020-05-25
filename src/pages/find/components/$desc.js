@@ -48,6 +48,8 @@ class ProductApp extends React.Component {
 
     return (
       <div>
+
+
         <NavBar
           mode="light"
           icon={<Icon type="left"/>}
