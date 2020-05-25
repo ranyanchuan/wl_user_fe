@@ -1,6 +1,7 @@
 import * as services from '../services';
 
 export default {
+
   namespace: 'findModel',
 
   state: {

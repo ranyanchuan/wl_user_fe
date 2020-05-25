@@ -247,7 +247,7 @@ export function formatFormDateRange(formData, fieldArray, formatRule = 'YYYY-MM-
 
 // 请求放回错误处理
 export function checkError(value) {
-  
+
   const {code, info} = value;
   if (value.err) {
     Toast.fail(value);
@@ -269,15 +269,6 @@ export function getPageParam(data) {
     size: pageSize,
   };
 }
-
-export function changeSelectVal(left, right) {
-  if (left && right) {
-    return left + '(' + right + ')';
-  } else {
-    return '';
-  }
-
-};
 
 
 /**

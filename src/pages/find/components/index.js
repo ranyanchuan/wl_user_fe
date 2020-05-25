@@ -18,7 +18,9 @@ class ProductApp extends React.Component {
   state = {
     countdown: true,
     isCountdown: 0,
+    codeNum: 0,
     hasError: false,
+
   };
 
 
@@ -44,11 +46,9 @@ class ProductApp extends React.Component {
 
   // 获取输入框的值
   onSubmit = () => {
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(['usercode','password'],(err, values) => {
       if (!err) {
-
         let usercode = values.usercode.replace(/\s+/g, "");
-
         this.props.dispatch({
           type: 'findModel/dologin',
           payload: {...values, usercode},
@@ -62,7 +62,7 @@ class ProductApp extends React.Component {
           },
         });
       } else {
-        Toast.info('请正确输入', 1);
+        Toast.info('请正确输入手机号/短信验证码', 2);
       }
     })
   }
@@ -70,28 +70,25 @@ class ProductApp extends React.Component {
 
   getCode = () => {
 
-    this.props.form.validateFields(['usercode'], (err, values) => {
 
+    this.props.form.validateFields(['usercode','codeTxt'], (err, values) => {
       if (!err) {
         let usercode = values.usercode.replace(/\s+/g, "");
-
         if (usercode && (/^1[3456789]\d{9}$/.test(usercode))) {
           this.setState({isCountdown: 60});
-
           this.countFun();
           this.props.dispatch({
             type: 'findModel/getCode',
             payload: {usercode},
             callback: (data) => {
               if (checkError(data)) {
-                console.log('验证码发送成功');
+                Toast.success('验证码发送成功!', 2);
               }
             },
           });
-
-        } else {
-          Toast.info('手机号码有误!', 1);
         }
+      } else {
+        Toast.info('手机号码或者图形验证码有误!', 2);
       }
     })
 
@@ -134,10 +131,18 @@ class ProductApp extends React.Component {
     Toast.info('手机号码有误!', 1);
   }
 
+
+  // 获取验证码
+  getyz = () => {
+    const {codeNum} = this.state;
+    this.setState({codeNum: codeNum + 1})
+  }
+
+
   render() {
 
     const {getFieldProps} = this.props.form;
-    const {isCountdown, hasError} = this.state;
+    const {isCountdown, hasError, codeNum} = this.state;
     const token = localStorage.getItem('token');
 
     const codeInfo = isCountdown ? isCountdown + 's 后重新获取' :
@@ -169,6 +174,7 @@ class ProductApp extends React.Component {
             <FahuoList/> :
             <div style={{marginTop: 20}}>
               <List>
+                {/*手机号*/}
                 <InputItem
                   {...getFieldProps('usercode', {
 
@@ -180,16 +186,39 @@ class ProductApp extends React.Component {
                   type="phone"
                   error={hasError}
                   onErrorClick={this.onErrorClick}
-                  placeholder="186 1234 1234"
-                  extra={!hasError ? codeInfo : null}
-                >手机号码</InputItem>
+                  placeholder="186 **** ****"
+                >
+                  手机号码
+                </InputItem>
 
+                {/*图形验证*/}
+                <InputItem
+                  {...getFieldProps('codeTxt', {
+                    rules: [{required: true, message: "请输入图形验证码"}],
+                  })}
+                  onErrorClick={this.onErrorClick}
+                  placeholder="请输入图形验证码"
+                  extra={<img className={styles.identityImg} src={`h5/getyz?name=${codeNum + 1}`}
+                              alt="验证码"
+                              onClick={this.getyz}/>}
+                >
+                  图形验证码
+                </InputItem>
+
+                {/*短信验证码*/}
                 <InputItem
                   {...getFieldProps('password', {
-                    rules: [{required: true, message: "请输入验证码"}],
-                    initialValue: "",
+                    rules: [{
+                      required: true,
+                      message: "请输入短信验证码"
+                    }],
                   })}
-                >短信验证</InputItem>
+                  placeholder="请输入短信验证码"
+                  extra={codeInfo}
+                >
+                  短信验证码
+                </InputItem>
+
 
               </List>
               <Button type="primary" style={{marginTop: 20}} onClick={this.onSubmit}>登录</Button>
