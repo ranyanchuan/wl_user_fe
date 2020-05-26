@@ -31,7 +31,7 @@ class FahuoList extends React.Component {
 
 
         if (!number || number.length < 10) {
-          Toast.fail('快递号不存在', 1);
+          Toast.fail('物流信息不存在', 1);
           return;
         }
 
@@ -71,7 +71,7 @@ class FahuoList extends React.Component {
             const {number} = data;
             router.push(`/find/desc/${number}`);
           } else {
-            Toast.fail('快递号不存在', 1);
+            Toast.fail('物流信息不存在', 1);
           }
         },
       });
@@ -103,7 +103,7 @@ class FahuoList extends React.Component {
             extra={<Icon type="search" size={"md"}/>}
           />
 
-          
+
         </List>
 
 

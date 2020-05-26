@@ -51,6 +51,11 @@ export function requestJson(url, options) {
         message.error(info);
         router.push('/403');
       }
+      if (code == -5) { // 无权限
+        localStorage.clear();
+        message.error(info);
+        router.push('/');
+      }
       return data;
     })
     .catch(err => ({ err }));
