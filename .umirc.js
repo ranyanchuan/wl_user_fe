@@ -6,6 +6,15 @@ import {resolve} from 'path';
 
 export default {
 
+
+  // exportStatic: {
+  //   htmlSuffix: true,
+  //   dynamicRoot: true,
+  // },
+
+  history: 'hash',
+  treeShaking: true,
+
   routes: [
     {
       path: '/',
@@ -32,9 +41,9 @@ export default {
       title: '物流',
       dll: false,
 
-      // routes: {
-      //   exclude: [],
-      // },
+      routes: {
+        exclude: [],
+      },
 
 
       hardSource: false,

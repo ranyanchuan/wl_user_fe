@@ -24,11 +24,7 @@ class FahuoList extends React.Component {
 
   // 通过快递单号查询
   onChangeSearch = () => {
-
-
     this.props.form.validateFields((err, values) => {
-
-
       if (!err) {
         Toast.loading('Loading...');
         this.props.dispatch({
@@ -41,11 +37,11 @@ class FahuoList extends React.Component {
               const {number} = data;
               router.push(`/find/desc/${number}`);
             } else {
-              Toast.fail('订单号不存在', 1);
+              Toast.fail('快递号不存在', 1);
             }
           },
         });
-        
+
       }
     })
   }
