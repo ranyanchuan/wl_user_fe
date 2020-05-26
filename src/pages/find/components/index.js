@@ -45,7 +45,6 @@ class ProductApp extends React.Component {
       },
     });
 
-
   }
 
 

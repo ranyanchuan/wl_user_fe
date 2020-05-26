@@ -15,8 +15,6 @@ const Brief = Item.Brief;
 
 class ProductApp extends React.Component {
 
-  state = {};
-
   componentDidMount() {
 
     const {params} = this.props.computedMatch;
@@ -64,12 +62,11 @@ class ProductApp extends React.Component {
 
 
         <WingBlank>
-
-          <List style={{marginTop:60}}>
+          <List style={{marginTop: 60}}>
             <Item
               key={descData.id}
               // arrow="horizontal"
-              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+              thumb={descData.logo}
               multipleLine
             >
               <span className={styles.spanHref}>{descData.number}</span>
