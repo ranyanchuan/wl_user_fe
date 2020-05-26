@@ -1,7 +1,7 @@
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 import React from 'react';
 
-import {List, InputItem, Icon, Toast} from 'antd-mobile';
+import {List, InputItem, Icon, Toast, Modal, Button} from 'antd-mobile';
 import router from 'umi/router';
 import {createForm} from 'rc-form';
 import {connect} from "dva";
@@ -9,6 +9,7 @@ import styles from './index.less';
 
 const Item = List.Item;
 const Brief = Item.Brief;
+const prompt = Modal.prompt;
 
 
 @connect((state) => ({
@@ -26,24 +27,51 @@ class FahuoList extends React.Component {
   onChangeSearch = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        Toast.loading('Loading...');
-        this.props.dispatch({
-          type: 'findModel/getQueryInfo',
-          payload: {number: values.number},
-          callback: (value) => {
-            Toast.hide();
-            const {data, code} = value;
-            if (code == '200' && data) {
-              const {number} = data;
-              router.push(`/find/desc/${number}`);
-            } else {
-              Toast.fail('快递号不存在', 1);
-            }
-          },
-        });
-
+        const {number} = values;
+        if (number && number.toLocaleLowerCase().includes("sf")) {
+          prompt('请输入手机号后四位', '', [
+            {text: '取消'},
+            {
+              text: '确定',
+              onPress: value => {
+                if (value && value.length === 4 && (/^\d{4}$/.test(value))) {
+                  this.getQueryInfo(`${number}:${value}`);
+                } else {
+                  Toast.fail('手机号后四位输入不对');
+                }
+              }
+            },
+          ])
+        } else {
+          this.getQueryInfo(number);
+        }
       }
     })
+  }
+
+  getQueryInfo = (number) => {
+
+    Toast.loading('Loading...');
+    if (number) { // 防止输入空
+      this.props.dispatch({
+        type: 'findModel/getQueryInfo',
+        payload: {number},
+        callback: (value) => {
+          Toast.hide();
+          const {data, code} = value;
+          if (code == '200' && data) {
+            const {number} = data;
+            router.push(`/find/desc/${number}`);
+          } else {
+            Toast.fail('快递号不存在', 1);
+          }
+        },
+      });
+
+    } else {
+      Toast.fail('请输入快递单号', 1);
+    }
+
   }
 
 
@@ -66,6 +94,7 @@ class FahuoList extends React.Component {
             placeholder="请输入快递单号"
             extra={<Icon type="search" size={"md"}/>}
           />
+
         </List>
 
 
