@@ -46,8 +46,6 @@ class ProductApp extends React.Component {
 
     return (
       <div>
-
-
         <div className={styles.navBar}>
           <NavBar
             mode="light"
