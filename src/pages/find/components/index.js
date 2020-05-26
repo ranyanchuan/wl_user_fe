@@ -2,12 +2,12 @@ import React from 'react';
 import {connect} from 'dva';
 import {Button, List, InputItem, Carousel, Toast, WingBlank} from 'antd-mobile';
 import {createForm} from 'rc-form';
-import {checkError} from 'utils';
 import FahuoList from "./FahuoList";
+
+
+import {checkError} from 'utils';
 import styles from './index.less';
 
-const Item = List.Item;
-const Brief = Item.Brief;
 
 @connect((state) => ({
   findModel: state.findModel,
@@ -23,7 +23,6 @@ class ProductApp extends React.Component {
 
   };
 
-
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -34,9 +33,14 @@ class ProductApp extends React.Component {
 
 
   getData = (payload = {}) => {
+
+    // todo 滚动加载
+    const pageSize = 2;
+    const pageIndex = 1;
+
     this.props.dispatch({
       type: 'findModel/getFahuo',
-      payload,
+      payload: {...payload, pageIndex,pageSize},
       callback: (data) => {
         console.log(data);
         Toast.hide();
@@ -44,23 +48,34 @@ class ProductApp extends React.Component {
     });
   }
 
+
   // 获取输入框的值
   onSubmit = () => {
-    this.props.form.validateFields(['usercode','password'],(err, values) => {
+
+    this.props.form.validateFields(['usercode', 'password'], (err, values) => {
       if (!err) {
         let usercode = values.usercode.replace(/\s+/g, "");
-        this.props.dispatch({
-          type: 'findModel/dologin',
-          payload: {...values, usercode},
-          callback: (value) => {
-            const {data} = value;
-            if (data && checkError(value)) {
-              this.getData();
-              const {token} = data;
-              localStorage.setItem("token", token);
-            }
-          },
-        });
+        // 校验手机号
+        if (usercode) {
+          Toast.loading('Loading...');
+          this.props.dispatch({
+            type: 'findModel/dologin',
+            payload: {...values, usercode},
+            callback: (value) => {
+              Toast.hide();
+              const {data} = value;
+              if (data && checkError(value)) {
+                this.getData();
+                const {token} = data;
+                localStorage.setItem("token", token);
+              } else {
+                const {codeNum} = this.state;
+                this.setState({codeNum: codeNum + 1});
+              }
+            },
+          });
+        }
+
       } else {
         Toast.info('请正确输入手机号/短信验证码', 2);
       }
@@ -70,16 +85,20 @@ class ProductApp extends React.Component {
 
   getCode = () => {
 
+    // 更新图形验证码
+    const {codeNum} = this.state;
+    this.setState({codeNum: codeNum + 1});
 
-    this.props.form.validateFields(['usercode','codeTxt'], (err, values) => {
+    this.props.form.validateFields(['usercode', 'smscode'], (err, values) => {
       if (!err) {
         let usercode = values.usercode.replace(/\s+/g, "");
         if (usercode && (/^1[3456789]\d{9}$/.test(usercode))) {
+
           this.setState({isCountdown: 60});
           this.countFun();
           this.props.dispatch({
             type: 'findModel/getCode',
-            payload: {usercode},
+            payload: {...values, usercode},
             callback: (data) => {
               if (checkError(data)) {
                 Toast.success('验证码发送成功!', 2);
@@ -171,7 +190,7 @@ class ProductApp extends React.Component {
         {/*获取手机号*/}
         <WingBlank>
           {token ?
-            <FahuoList/> :
+            <FahuoList getData={this.getData}/> :
             <div style={{marginTop: 20}}>
               <List>
                 {/*手机号*/}
@@ -181,7 +200,6 @@ class ProductApp extends React.Component {
                     rules: [{required: true, message: "请输入手机号"}],
                     initialValue: "",
                     onChange: this.onChangeUser,
-
                   })}
                   type="phone"
                   error={hasError}
@@ -193,8 +211,9 @@ class ProductApp extends React.Component {
 
                 {/*图形验证*/}
                 <InputItem
-                  {...getFieldProps('codeTxt', {
+                  {...getFieldProps('smscode', {
                     rules: [{required: true, message: "请输入图形验证码"}],
+                    initialValue: "",
                   })}
                   onErrorClick={this.onErrorClick}
                   placeholder="请输入图形验证码"

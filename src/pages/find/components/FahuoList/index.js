@@ -18,13 +18,22 @@ const Brief = Item.Brief;
 
 class FahuoList extends React.Component {
 
-  state = {
-    disabled: false,
-  }
-
 
   onClick = (id) => {
     router.push(`/find/desc/${id}`);
+  }
+
+
+  // 通过快递单号查询
+  onChangeSearch = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const {getData} = this.props;
+        if (getData) {
+          getData({number: values.number});
+        }
+      }
+    })
   }
 
 
@@ -37,11 +46,12 @@ class FahuoList extends React.Component {
     const {getFieldProps} = this.props.form;
 
     return (
-      <div style={{marginTop:20}}>
+      <div style={{marginTop: 20}}>
         <WingBlank>
           <List>
             <InputItem
-              {...getFieldProps('preice')}
+              {...getFieldProps('number')}
+              onExtraClick={this.onChangeSearch}
               placeholder="请输入快递单号"
               extra={<Icon type="search" size={"md"}/>}
             />

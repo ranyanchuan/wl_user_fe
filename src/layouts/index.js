@@ -9,14 +9,6 @@ import {LocaleProvider} from 'antd-mobile';
 
 class BasicLayout extends React.Component {
 
-  state = {}
-
-  componentDidMount() {
-
-  }
-
-
-
   render() {
 
     return (
