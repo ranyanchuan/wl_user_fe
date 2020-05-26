@@ -11,7 +11,7 @@ export default {
       path: '/',
       component: '../layouts/index',
       routes: [
-        {path: '/', redirect: '/find'},
+        {path: '/', component: './find/components/'},
         {path: '/find', component: './find/components/'},
         {path: '/find/desc/:id', component: './find/components/$desc.js'},
 
@@ -65,12 +65,6 @@ export default {
       changeOrigin: true,
       // pathRewrite: { "^/api" : ""}
     },
-
-    '/login': {
-      target: 'http://127.0.0.1:8080/',
-      changeOrigin: true,
-    },
-
     '/h5': {
       target: 'http://127.0.0.1:8080/',
       changeOrigin: true,

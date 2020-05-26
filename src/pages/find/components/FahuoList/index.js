@@ -1,12 +1,11 @@
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 import React from 'react';
 
-import {List, InputItem, Icon} from 'antd-mobile';
+import {List, InputItem, Icon, Toast} from 'antd-mobile';
 import router from 'umi/router';
 import {createForm} from 'rc-form';
 import {connect} from "dva";
 import styles from './index.less';
-
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -25,15 +24,28 @@ class FahuoList extends React.Component {
 
   // 通过快递单号查询
   onChangeSearch = () => {
+
+
     this.props.form.validateFields((err, values) => {
+
+
       if (!err) {
-        const {getData} = this.props;
-        const payload = {
-          filterObj: {number: values.number},
-        }
-        if (getData) {
-          getData(payload);
-        }
+        Toast.loading('Loading...');
+        this.props.dispatch({
+          type: 'findModel/getQueryInfo',
+          payload: {number: values.number},
+          callback: (value) => {
+            Toast.hide();
+            const {data, code} = value;
+            if (code == '200' && data) {
+              const {number} = data;
+              router.push(`/find/desc/${number}`);
+            } else {
+              Toast.fail('订单号不存在', 1);
+            }
+          },
+        });
+        
       }
     })
   }
@@ -49,6 +61,7 @@ class FahuoList extends React.Component {
 
     return (
       <div style={{marginTop: 20}}>
+
 
         <List>
           <InputItem

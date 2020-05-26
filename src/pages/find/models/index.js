@@ -24,7 +24,6 @@ export default {
     },
 
 
-
     fahuoTestData: {
       pageIndex: 1,
       pageNumber: 1,
@@ -47,7 +46,6 @@ export default {
         },
       ]
     },
-
 
 
   },
@@ -94,7 +92,6 @@ export default {
     },
 
 
-
     //  发货
     * getTestFahuo({payload, callback}, {call, put, select}) {
       // const {data} = yield call(services.getFahuo, payload);
@@ -102,7 +99,7 @@ export default {
       //   yield put({type: 'updateState', res: {fahuoTestData: data}});
       // }
 
-      const data=[{
+      const data = [{
         img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
         title: 'Meet hotel',
         des: '不是所有的兼职汪都需要风吹日晒',
@@ -123,15 +120,7 @@ export default {
         callback(data);
       }
 
-
     },
-
-
-
-
-
-
-
 
 
     //  分页查询
@@ -146,6 +135,13 @@ export default {
     },
 
 
+    //  分页查询
+    * getQueryInfo({payload, callback}, {call, put, select}) {
+      const data = yield call(services.getDesc, payload);
+      if (callback) {
+        callback(data);
+      }
+    },
 
   },
 
