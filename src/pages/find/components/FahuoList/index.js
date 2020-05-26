@@ -28,6 +28,14 @@ class FahuoList extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const {number} = values;
+
+
+        if (!number || number.length < 10) {
+          Toast.fail('快递号不存在', 1);
+          return;
+        }
+
+
         if (number && number.toLocaleLowerCase().includes("sf")) {
           prompt('请输入手机号后四位', '', [
             {text: '取消'},
@@ -95,6 +103,7 @@ class FahuoList extends React.Component {
             extra={<Icon type="search" size={"md"}/>}
           />
 
+          
         </List>
 
 
