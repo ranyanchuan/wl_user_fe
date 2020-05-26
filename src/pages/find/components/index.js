@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'dva';
 import {Button, List, InputItem, Carousel, Toast, WingBlank} from 'antd-mobile';
 import {createForm} from 'rc-form';
-import FahuoList from "./FahuoList";
+// import FahuoList from "./FahuoList/copy.js";
+import FahuoList from "./FahuoList/";
 
 
 import {checkError} from 'utils';
@@ -34,18 +35,17 @@ class ProductApp extends React.Component {
 
   getData = (payload = {}) => {
 
-    // todo 滚动加载
-    const pageSize = 2;
-    const pageIndex = 1;
-
+    Toast.loading('Loading...');
     this.props.dispatch({
       type: 'findModel/getFahuo',
-      payload: {...payload, pageIndex,pageSize},
+      payload: {...payload, pageIndex: 1, pageSize: 500},
       callback: (data) => {
         console.log(data);
         Toast.hide();
       },
     });
+
+
   }
 
 
@@ -68,10 +68,9 @@ class ProductApp extends React.Component {
                 this.getData();
                 const {token} = data;
                 localStorage.setItem("token", token);
-              } else {
-                const {codeNum} = this.state;
-                this.setState({codeNum: codeNum + 1});
               }
+              const {codeNum} = this.state;
+              this.setState({codeNum: codeNum + 1});
             },
           });
         }

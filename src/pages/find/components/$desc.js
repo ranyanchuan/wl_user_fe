@@ -50,21 +50,22 @@ class ProductApp extends React.Component {
       <div>
 
 
-        <NavBar
-          mode="light"
-          icon={<Icon type="left"/>}
-          onLeftClick={this.onLeftClick}
-          // rightContent={[
-          //   <Icon key="0" type="search" style={{marginRight: '16px'}}/>,
-          //   <Icon key="1" type="ellipsis"/>,
-          // ]}
-        >详情</NavBar>
-
+        <div className={styles.navBar}>
+          <NavBar
+            mode="light"
+            icon={<Icon type="left"/>}
+            onLeftClick={this.onLeftClick}
+            // rightContent={[
+            //   <Icon key="0" type="search" style={{marginRight: '16px'}}/>,
+            //   <Icon key="1" type="ellipsis"/>,
+            // ]}
+          >详情</NavBar>
+        </div>
 
 
         <WingBlank>
 
-          <List className="my-list">
+          <List style={{marginTop:60}}>
             <Item
               key={descData.id}
               // arrow="horizontal"

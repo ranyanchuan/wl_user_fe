@@ -23,6 +23,33 @@ export default {
       rows: []
     },
 
+
+
+    fahuoTestData: {
+      pageIndex: 1,
+      pageNumber: 1,
+      pageSize: 20,
+      rows: [
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+          title: 'Meet hotel',
+          des: '不是所有的兼职汪都需要风吹日晒',
+        },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
+          title: 'McDonald\'s invites you',
+          des: '不是所有的兼职汪都需要风吹日晒',
+        },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
+          title: 'Eat the week',
+          des: '不是所有的兼职汪都需要风吹日晒',
+        },
+      ]
+    },
+
+
+
   },
 
 
@@ -65,6 +92,46 @@ export default {
         callback(data);
       }
     },
+
+
+
+    //  发货
+    * getTestFahuo({payload, callback}, {call, put, select}) {
+      // const {data} = yield call(services.getFahuo, payload);
+      // if (data) {
+      //   yield put({type: 'updateState', res: {fahuoTestData: data}});
+      // }
+
+      const data=[{
+        img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+        title: 'Meet hotel',
+        des: '不是所有的兼职汪都需要风吹日晒',
+      },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
+          title: 'McDonald\'s invites you',
+          des: '不是所有的兼职汪都需要风吹日晒',
+        },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
+          title: 'Eat the week',
+          des: '不是所有的兼职汪都需要风吹日晒',
+        }];
+
+
+      if (callback) {
+        callback(data);
+      }
+
+
+    },
+
+
+
+
+
+
+
 
 
     //  分页查询

@@ -18,19 +18,20 @@ const Brief = Item.Brief;
 
 class FahuoList extends React.Component {
 
-
   onClick = (id) => {
     router.push(`/find/desc/${id}`);
   }
-
 
   // 通过快递单号查询
   onChangeSearch = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const {getData} = this.props;
+        const payload = {
+          filterObj: {number: values.number},
+        }
         if (getData) {
-          getData({number: values.number});
+          getData(payload);
         }
       }
     })
