@@ -92,13 +92,13 @@ class ProductApp extends React.Component {
         let usercode = values.usercode.replace(/\s+/g, "");
         if (usercode && (/^1[3456789]\d{9}$/.test(usercode))) {
 
-          this.setState({isCountdown: 60});
-          this.countFun();
           this.props.dispatch({
             type: 'findModel/getCode',
             payload: {...values, usercode},
             callback: (data) => {
               if (checkError(data)) {
+                this.setState({isCountdown: 60});
+                this.countFun();
                 Toast.success('验证码发送成功!', 2);
               }
             },
