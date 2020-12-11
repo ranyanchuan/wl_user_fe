@@ -35,7 +35,7 @@ class DemoApp extends React.Component {
 
   // 查看详情
   onClickDesc = (data) => {
-    let id = {data};
+    let {id} = data;
     router.push('/demo/desc/'+id);
   }
 
@@ -67,7 +67,6 @@ class DemoApp extends React.Component {
           <Grid data={data} columnNum={3} onClick={this.onClickDesc}/>
         </div>
 
-s
       </div>
     );
   }

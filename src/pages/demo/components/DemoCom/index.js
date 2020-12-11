@@ -15,6 +15,7 @@ class DemoCom extends React.Component {
     const myImg = src => <img src={src} className="spe am-icon am-icon-md" alt=""/>;
 
     return (
+
       <Result
         style={{
           marginTop: 50
